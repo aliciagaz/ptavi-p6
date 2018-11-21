@@ -16,11 +16,11 @@ try:
 except IndexError:
     sys.exit("Usage: python3 server.py IP port audio_file")
 
-TRYING = b"SIP/2.0 100 Trying\r\n"
-RINGING = b"SIP/2.0 180 Ringing\r\n"
-OK = b"SIP/2.0 200 OK\r\n"
-BAD_REQUEST = b"SIP/2.0 400 Bad Request\r\n"
-METHOD_NOT_ALLOWED = b"SIP/2.0 405 Method Not Allowed\r\n"
+TRYING = b"SIP/2.0 100 Trying\r\n\r\n"
+RINGING = b"SIP/2.0 180 Ringing\r\n\r\n"
+OK = b"SIP/2.0 200 OK\r\n\r\n"
+BAD_REQUEST = b"SIP/2.0 400 Bad Request\r\n\r\n"
+METHOD_NOT_ALLOWED = b"SIP/2.0 405 Method Not Allowed\r\n\r\n"
     
 class EchoHandler(socketserver.DatagramRequestHandler):
 
@@ -34,7 +34,7 @@ class EchoHandler(socketserver.DatagramRequestHandler):
             if not line:
                 break
             if method == lista[0]:
-                self.wfile.write(TRYING + RINGING + OK + b"\r\n")
+                self.wfile.write(TRYING + RINGING + OK)
                 print("El cliente nos manda " + line.decode('utf-8'))
             elif method == lista[1]:
                 print("El cliente nos manda " + line.decode('utf-8'))
@@ -42,12 +42,12 @@ class EchoHandler(socketserver.DatagramRequestHandler):
                 print("Vamos a ejecutar: " + aEjecutar)
                 os.system(aEjecutar)
             elif method == lista[2]:
-                self.wfile.write(OK + b"\r\n")
+                self.wfile.write(OK)
                 print("El cliente nos manda " + line.decode('utf-8'))
             elif method != lista:
-                self.wfile.write(METHOD_NOT_ALLOWED + b"\r\n")
+                self.wfile.write(METHOD_NOT_ALLOWED)
             elif self.error(lista_line_decode):
-                self.wfile.write(BAD_REQUEST + b"\r\n")
+                self.wfile.write(BAD_REQUEST)
 
 if __name__ == "__main__":
 
