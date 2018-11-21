@@ -12,6 +12,7 @@ try:
     RECEIVER = sys.argv[2][:sys.argv[2].find("@")]
     IP = sys.argv[2][sys.argv[2].find("@")+1: sys.argv[2].rfind(":")]
     PORT = int(sys.argv[2][sys.argv[2].rfind(":")+1:])
+    LINE = (METHOD + " sip:" + RECEIVER + "@" + IP + " SIP/2.0\r\n")
     
 except IndexError:
     sys.exit("Usage: python3 client.py method receiver@IP:SIPport")
@@ -20,7 +21,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
     my_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     my_socket.connect((IP, PORT))
 
-    print("Enviando: " + RECEIVER)
+    print("Enviando: " + LINE)
     if METHOD == "INVITE" or METHOD == "BYE":
         my_socket.send(bytes(METHOD + " sip:" + RECEIVER + " SIP/2.0\r\n" , 'utf-8') +
                        b'\r\n')
